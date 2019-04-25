@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+	<meta charset="utf-8" />
+	<title>Audio Visualizer</title>
+
+
+	<link rel="stylesheet" href="css/main.min.css" type="text/css" />
+
+	<script type="text/javascript" src="js/jquery-3.4.0.min.js"></script>
+
+	<script id="vs" type="x-shader/x-vertex" charset="UTF-8">
+precision mediump float;
+
+attribute vec3 aPosition;
+attribute float aLength;
+attribute vec2 aUv;
+
+uniform float offset;
+uniform float strength;
+uniform mat4 perspectiveMatrix;
+uniform mat4 matrix;
+
+varying vec2 vUv;
+
+void main(void) {
+	float scale = cos(aLength+offset)*strength*0.5 + 1.25 + 3.0*strength;
+	vec3 position = aPosition * scale;
+	vUv = aUv;
+	gl_Position = perspectiveMatrix * matrix * vec4(position, 1.0) + vec4(0.0, 0.5, 0.0, 0.0);
+}
+	</script>
+
+	<script id="fs" type="x-shader/x-fragment" charset="UTF-8">
+precision mediump float;
+
+uniform sampler2D texture;
+uniform float offset;
+uniform float strength;
+
+varying vec2 vUv;
+
+float pi2 = 3.14159265359 * 2.0;
+
+void main(void) {
+	vec2 uv = vUv - vec2(0.5, 0.5);
+
+	float len = length(uv);
+	float s = sin(len * pi2 * 32.0 - offset) * strength * 0.2;
+	vec2 map = vec2(uv.x/len*s, uv.y/len*s);
+
+	uv = vUv + map;
+
+	gl_FragColor = texture2D(texture, uv);
+}
+	</script>
+
+</head>
+<body>
+	<div id="container">
+		<script type="text/javascript" charset="UTF-8">$("#container").hide();</script>
+		<canvas id="wgl" style="background-image: url('images/test.jpg');"></canvas>
+<!-- 		<div id="navi">
+			<ul>
+				<li style="margin-left: 30%; margin-right: 30%;width: 40%;"><button style="margin: auto;" type="button"><span>PLAY</span></button></li>
+			</ul>
+		</div> -->
+
+		<script type="text/javascript" src="js/preloadjs.min.js"></script>
+		<script type="text/javascript" src="js/wgl.min.js"></script>
+		<script type="text/javascript" src="js/gl-matrix-min.js"></script>
+		<script type="text/javascript" src="js/main.min.js"></script>
+
+		<script>
+			(function (i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r;
+				i[r] = i[r] || function () {
+					(i[r].q = i[r].q || []).push(arguments)
+				}, i[r].l = 1 * new Date();
+				a = s.createElement(o),
+					m = s.getElementsByTagName(o)[0];
+				a.async = 1;
+				a.src = g;
+				m.parentNode.insertBefore(a, m)
+			})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+			ga('create', 'UA-33301647-1', 'auto');
+			ga('send', 'pageview');
+		</script>
+	</div>
+
+</body>
+</html>
