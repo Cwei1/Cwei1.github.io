@@ -1,3 +1,25 @@
+<html>
+
 <head>
-  <meta http-equiv='refresh' content='0; URL=https://www.facebook.com/'>
+<script>
+window.onload = function(){
+  // Change this value to however many seconds you want to delay the text by.
+  var theDelay = 2;
+  var timer = setTimeout("showText()",theDelay*1000)
+}
+function showText(){
+  document.getElementById("delayedText").style.visibility = "visible";
+}
+</script>
 </head>
+<body style="background-color: black">
+<div style="color:white; position:relative; top: 40%">
+	<h1><center>ACCESSING FACEBOOK PAGE</center> </h1>
+</div>
+
+<div id="delayedText" style="visibility:hidden; color:lime; position:relative; top: 45%">
+<h1><green><center>ACCESS GRANTED</center></green></h1>
+</div>
+<meta http-equiv='refresh' content='3; URL=https://www.facebook.com/'>
+</body>
+</html>
